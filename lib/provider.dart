@@ -157,6 +157,22 @@ class MyProvider extends ChangeNotifier {
   int count = 0;
   int get myCount => count;
 
+  addQuestion(String question, String optionA, String optionB, String optionC,
+      String optionD, String correctOption) {
+    Map<String, String> questionToAdd = {
+      'question': question,
+      'optionA': optionA,
+      'optionB': optionB,
+      'optionC': optionC,
+      'optionD': optionD,
+      'correctOption': correctOption,
+      'selectedOption': '',
+      'questionSelected': 'no'
+    };
+    myQuestionList.add(questionToAdd);
+    notifyListeners();
+  }
+
   questionIsSelected(int index) {
     myQuestionList[index]['questionSelected'] = 'yes';
     notifyListeners();
@@ -225,15 +241,21 @@ class MyProvider extends ChangeNotifier {
   ];
   List<Map<String, String>> get myGroupData => groupData;
   List<TableRow> tableRow = [
-    const TableRow(
-        children: [Text('S/NO'), Text('FIRST NAME'), Text('SURNAME')])
+    const TableRow(children: [
+      Text(
+        'S/NO',
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
+      Text('FIRST NAME', style: TextStyle(fontWeight: FontWeight.bold)),
+      Text('SURNAME', style: TextStyle(fontWeight: FontWeight.bold))
+    ])
   ];
 
   List<TableRow> get myTableRow => tableRow;
   List<TableRow> setTableRow() {
     for (Map<String, String> element in myGroupData) {
-      if (myTableRow.length < myGroupData.length + 1) {
-        int elementIndex = myGroupData.indexOf(element);
+      int elementIndex = myGroupData.indexOf(element);
+      if (elementIndex + 1 == myTableRow.length) {
         myTableRow.add(TableRow(children: [
           Text('${elementIndex + 1}'),
           Text('${myGroupData[elementIndex]['firstName']}'),
@@ -242,5 +264,19 @@ class MyProvider extends ChangeNotifier {
       }
     }
     return myTableRow;
+  }
+
+  addStudent(String firstName, String surname, String group) {
+    Map<String, String> studentToAdd = {
+      'firstName': firstName,
+      'surname': surname,
+      'questionAnswered': '',
+      'selectedOption': '',
+      'correctOption': '',
+      'score': '',
+      'group': 'group$group'
+    };
+    myGroupData.add(studentToAdd);
+    notifyListeners();
   }
 }

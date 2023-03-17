@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mathapp/add_question_page.dart';
 import 'package:mathapp/groups_data.dart';
 import 'package:mathapp/provider.dart';
 import 'package:mathapp/question_page.dart';
 import 'package:provider/provider.dart';
+
+import 'add_student_page.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
@@ -52,6 +55,22 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddQuestionPage()));
+              },
+              icon: const Icon(Icons.add, size: 30)),
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddStudentPage()));
+              },
+              icon: const Icon(Icons.add_task, size: 30)),
           Padding(
             padding: EdgeInsets.only(
                 right: MediaQuery.of(context).size.width >= 900
