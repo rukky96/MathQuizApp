@@ -18,7 +18,6 @@ class _AddStudentPageState extends State<AddStudentPage> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<MyProvider>(context);
-    String? errorText;
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,

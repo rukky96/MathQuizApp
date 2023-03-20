@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:mathapp/add_question_page.dart';
 import 'package:mathapp/groups_data.dart';
@@ -51,6 +53,116 @@ class _HomePageState extends State<HomePage> {
     }
 
     final provider = Provider.of<MyProvider>(context);
+
+    Future<void> showMyDialog(int questionSelected) async {
+      return showDialog<void>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+                title: provider.myGroupToAnswer == 0
+                    ? const Text(
+                        'GROUP A',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.bold),
+                      )
+                    : const Text('GROUP B',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.bold)),
+                content: Container(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  width: MediaQuery.of(context).size.width >= 700
+                      ? MediaQuery.of(context).size.width * 0.6
+                      : MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.height >= 700
+                      ? MediaQuery.of(context).size.height * 0.6
+                      : MediaQuery.of(context).size.height * 0.8,
+                  child: SingleChildScrollView(
+                    child: provider.myGroupToAnswer == 0
+                        ? Column(
+                            children: List.generate(provider.myGroupData.length,
+                                (index) {
+                            Widget groupA = Container();
+                            if (provider.myGroupData[index]['group'] ==
+                                'groupA') {
+                              groupA = (Container(
+                                margin: const EdgeInsets.only(bottom: 5),
+                                child: ListTile(
+                                  onTap: provider.myGroupData[index]
+                                              ['questionAnswered'] ==
+                                          ''
+                                      ? () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    QuestionPage(
+                                                        studentNumber: index,
+                                                        questionNumber:
+                                                            questionSelected),
+                                              ));
+                                        }
+                                      : () {},
+                                  tileColor: provider.myGroupData[index]
+                                              ['questionAnswered'] ==
+                                          ''
+                                      ? Colors.blue.shade100
+                                      : Colors.red.shade200,
+                                  title: Text(
+                                      '${provider.myGroupData[index]['surname']} ${provider.myGroupData[index]['firstName']}',
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                                ),
+                              ));
+                            }
+                            return groupA;
+                          }))
+                        : Column(
+                            children: List.generate(provider.myGroupData.length,
+                                (index) {
+                            Widget groupB = Container();
+                            if (provider.myGroupData[index]['group'] ==
+                                'groupB') {
+                              groupB = (Container(
+                                margin: const EdgeInsets.only(bottom: 5),
+                                child: ListTile(
+                                  onTap: provider.myGroupData[index]
+                                              ['questionAnswered'] ==
+                                          ''
+                                      ? () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    QuestionPage(
+                                                        studentNumber: index,
+                                                        questionNumber:
+                                                            questionSelected),
+                                              ));
+                                        }
+                                      : () {},
+                                  tileColor: provider.myGroupData[index]
+                                              ['questionAnswered'] ==
+                                          ''
+                                      ? Colors.blue.shade100
+                                      : Colors.red.shade200,
+                                  title: Text(
+                                      '${provider.myGroupData[index]['surname']} ${provider.myGroupData[index]['firstName']}',
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                                ),
+                              ));
+                            }
+                            return groupB;
+                          })),
+                  ),
+                ));
+          });
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -75,7 +187,7 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.only(
                 right: MediaQuery.of(context).size.width >= 900
                     ? MediaQuery.of(context).size.width * 0.10
-                    : 30),
+                    : 20),
             child: IconButton(
                 onPressed: () {
                   Navigator.push(
@@ -88,9 +200,9 @@ class _HomePageState extends State<HomePage> {
         ],
         toolbarHeight: 100,
         backgroundColor: Colors.blue.shade900,
-        centerTitle: true,
+        centerTitle: MediaQuery.of(context).size.width >= 500 ? true : false,
         title: const Text(
-          'MATH QUIZ Questions',
+          'MATH Questions',
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 30, fontWeight: FontWeight.bold, letterSpacing: 1),
@@ -112,13 +224,7 @@ class _HomePageState extends State<HomePage> {
                   onPressed:
                       provider.myQuestionList[index]['questionSelected'] == 'no'
                           ? () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        QuestionPage(questionNumber: index),
-                                  ));
-                              provider.questionIsSelected(index);
+                              showMyDialog(index);
                             }
                           : () {},
                   style: ElevatedButton.styleFrom(

@@ -279,4 +279,17 @@ class MyProvider extends ChangeNotifier {
     myGroupData.add(studentToAdd);
     notifyListeners();
   }
+
+  int groupToAnswer = 1;
+  int get myGroupToAnswer => groupToAnswer;
+
+  changeGroupToAnswer() {
+    if (myGroupToAnswer == 0) {
+      groupToAnswer = 1;
+    } else {
+      groupToAnswer = 0;
+    }
+
+    notifyListeners();
+  }
 }

@@ -7,7 +7,9 @@ import 'package:provider/provider.dart';
 
 class QuestionPage extends StatefulWidget {
   final int questionNumber;
-  const QuestionPage({super.key, required this.questionNumber});
+  final int studentNumber;
+  const QuestionPage(
+      {super.key, required this.questionNumber, required this.studentNumber});
 
   @override
   State<QuestionPage> createState() => _QuestionPageState();
@@ -118,7 +120,7 @@ class _QuestionPageState extends State<QuestionPage> {
         backgroundColor: appBarColor,
         centerTitle: true,
         title: Text(
-          'Question ${widget.questionNumber + 1} ($time)',
+          'Question ${widget.questionNumber + 1}',
           style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
       ),
@@ -152,7 +154,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   tileColor: provider.myQuestionList[widget.questionNumber]
                               ['selectedOption'] ==
                           'A'
-                      ? Colors.red.shade900
+                      ? Colors.yellow.shade900
                       : Colors.blue.shade100,
                   onTap: () {
                     provider.selectOption(widget.questionNumber, 'A');
@@ -175,7 +177,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   tileColor: provider.myQuestionList[widget.questionNumber]
                               ['selectedOption'] ==
                           'B'
-                      ? Colors.red.shade900
+                      ? Colors.yellow.shade900
                       : Colors.blue.shade100,
                   onTap: () {
                     provider.selectOption(widget.questionNumber, 'B');
@@ -198,7 +200,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   tileColor: provider.myQuestionList[widget.questionNumber]
                               ['selectedOption'] ==
                           'C'
-                      ? Colors.red.shade900
+                      ? Colors.yellow.shade900
                       : Colors.blue.shade100,
                   onTap: () {
                     provider.selectOption(widget.questionNumber, 'C');
@@ -221,7 +223,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   tileColor: provider.myQuestionList[widget.questionNumber]
                               ['selectedOption'] ==
                           'D'
-                      ? Colors.red.shade900
+                      ? Colors.yellow.shade900
                       : Colors.blue.shade100,
                   onTap: () {
                     provider.selectOption(widget.questionNumber, 'D');
@@ -244,7 +246,39 @@ class _QuestionPageState extends State<QuestionPage> {
                   tileColor: Colors.purple.shade900,
                   onTap: () {
                     timer!.cancel();
+
+                    //function to set that question number has been selected
+                    provider.questionIsSelected(widget.questionNumber);
+
+                    //function to set the next group that will answer after the current one
+                    provider.changeGroupToAnswer();
+
                     timeController.pause();
+
+                    //function to set the question the student answered to the student data
+                    provider.myGroupData[widget.studentNumber]
+                        ['questionAnswered'] = '${widget.questionNumber}';
+
+                    //function to set the option the student chose to the student data
+                    provider.myGroupData[widget.studentNumber]
+                            ['selectedOption'] =
+                        '${provider.myQuestionList[widget.questionNumber]['selectedOption']}';
+
+                    //function to set the correct option to the question number the student chose
+                    provider.myGroupData[widget.studentNumber]
+                            ['correctOption'] =
+                        '${provider.myQuestionList[widget.questionNumber]['correctOption']}';
+
+                    //function to assign score to the question number that was answered
+                    if (provider.myGroupData[widget.studentNumber]
+                            ['selectedOption'] ==
+                        provider.myGroupData[widget.studentNumber]
+                            ['correctOption']) {
+                      provider.myGroupData[widget.studentNumber]['score'] = '1';
+                    } else {
+                      provider.myGroupData[widget.studentNumber]['score'] = '0';
+                    }
+
                     showMyDialog();
                   },
                   title: const Text(

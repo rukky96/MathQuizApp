@@ -32,29 +32,62 @@ class _GroupDataPageState extends State<GroupDataPage> {
                 fontSize: 30, fontWeight: FontWeight.bold, letterSpacing: 1),
           ),
         ),
-        body: MediaQuery.of(context).size.width >= 900
-            ? Row(
-                children: [
-                  Container(
-                      clipBehavior: Clip.none,
-                      width: MediaQuery.of(context).size.width * 0.48,
-                      child: Table(children: provider.myTableRow)),
-                  Container(
-                      clipBehavior: Clip.none,
-                      width: MediaQuery.of(context).size.width * 0.48,
-                      child: Table(children: provider.myTableRow)),
-                ],
-              )
-            : ContainedTabBarView(tabs: const [
-                Text('GROUP A'),
-                Text('GROUP B')
-              ], views: [
-                Container(
-                    clipBehavior: Clip.none,
-                    child: Table(children: provider.myTableRow)),
-                Container(
-                    clipBehavior: Clip.none,
-                    child: Table(children: provider.myTableRow)),
-              ]));
+        body: Container(
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+          child: MediaQuery.of(context).size.width >= 900
+              ? Row(
+                  children: [
+                    Container(
+                        clipBehavior: Clip.none,
+                        width: MediaQuery.of(context).size.width * 0.48,
+                        child: Table(children: provider.myTableRow)),
+                    Container(
+                        clipBehavior: Clip.none,
+                        width: MediaQuery.of(context).size.width * 0.48,
+                        child: Table(children: provider.myTableRow)),
+                  ],
+                )
+              : ContainedTabBarView(
+                  tabBarProperties: const TabBarProperties(
+                      height: 30,
+                      indicatorColor: Colors.black,
+                      alignment: TabBarAlignment.start,
+                      labelPadding: EdgeInsets.all(0),
+                      labelColor: Colors.black,
+                      labelStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black)),
+                  tabs: const [
+                      Text(
+                        'GROUP A',
+                        textAlign: TextAlign.left,
+                      ),
+                      Text(
+                        'GROUP B',
+                        textAlign: TextAlign.left,
+                      )
+                    ],
+                  views: [
+                      Container(
+                          padding: const EdgeInsets.all(10),
+                          clipBehavior: Clip.none,
+                          child: Column(
+                            children: [
+                              const Text('GROUP A'),
+                              Table(children: provider.myTableRow),
+                            ],
+                          )),
+                      Container(
+                          padding: const EdgeInsets.all(10),
+                          clipBehavior: Clip.none,
+                          child: Column(
+                            children: [
+                              const Text('GROUP A'),
+                              Table(children: provider.myTableRow),
+                            ],
+                          )),
+                    ]),
+        ));
   }
 }
